@@ -135,16 +135,7 @@
                     nextPage = self._nextPage,
                     previousPage = self._previousPage;
                 
-                return new Query(self._url).options(self._options).paginate(nextPage, previousPage);
-            },
-            reset: function() {
-
-                var self = this;
-
-                self.cancel();
-                self._options = {};
-
-                return self;
+                return new ChainQuery(self._url).options(self._options).paginate(nextPage, previousPage);
             }
         };
 

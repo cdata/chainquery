@@ -61,6 +61,20 @@
 
                 return self;
             },
+            get: function(callback) {
+
+                var self = this;
+
+                self._options.type = "GET";
+                self.execute(callback);
+            },
+            post: function(callback) {
+                
+                var self = this;
+
+                self._options.type = "POST";
+                self.execute(callback);
+            },
             paginate: function(nextPage, previousPage) {
                 
                 var self = this;

@@ -25,13 +25,13 @@
 
                             var valueProxy = value;
 
-                            return function(value, replaceObject) {
+                            return function(value, extend) {
 
                                 var self = this;
 
-                                if(value) {
+                                if(value !== undefined) {
 
-                                    if(typeCompare(valueProxy, value, {}) && replaceObject !== true) {
+                                    if(typeCompare(valueProxy, value, {}) && extend === true) {
 
                                         extend(valueProxy, value);
                                     } else {
@@ -77,7 +77,7 @@
 
                 for(var index = 0; index < list.length; index++) {
 
-                    if(callback(list[i], i, list) === false) {
+                    if(callback(list[index], index, list) === false) {
 
                         break;
                     }
@@ -107,7 +107,7 @@
         },
         typeCompare = function() {
 
-            var args = array.slice.call(arguments),
+            var args = Array.prototype.slice.call(arguments),
                 type = typeof args.shift(),
                 homogenous = true;
 
@@ -192,7 +192,7 @@
  */
             Transport = defineable(function(attributes) {
                 
-                this.attributes(attributes).invalidate();
+                this.attributes(attributes || 0).invalidate();
             });
         
         extend(
@@ -504,7 +504,7 @@
 
                     if(method.toLowerCase() === 'get') {
 
-                        url = url.split('?')[0] + '?';
+                        endpoint = endpoint.split('?')[0] + '?';
 
                         for(var key in data) {
 
@@ -524,7 +524,7 @@
                 },
 
 /*
- * member Query::get, Query::post, Query::put, Query::del
+ * member Query::get, Query::post
  *
  * parameter url:String (optional) - The HTTP endpoint for the request
  * 
@@ -532,8 +532,6 @@
  */
                 get: function(url) { return this.request('GET', url); },
                 post: function(url) { return this.request('POST', url); },
-                put: function(url) { return this.request('PUT', url); },
-                del: function(url) { return this.request('DELETE', url); },
 
 /*
  * member Query::abort
@@ -541,6 +539,8 @@
  * This method aborts the current request if one is active.
  */
                 abort: function() { this.transport().abort(); return self; },
+
+                headers: function() { this.transport().headers.apply(undefined, arguments); return self; },
 
 /*
  * member Query::clone
